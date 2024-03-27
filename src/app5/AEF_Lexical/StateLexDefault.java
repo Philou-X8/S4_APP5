@@ -17,22 +17,53 @@ public class StateLexDefault implements StateLex{
 
     @Override
     public void ReadNext(char nextChar) {
-        switch (nextChar) {
-            case '0' -> {
-                strUL += "0";
-                context.ChangeState(new StateLexDefault(context, strUL)); // TODO: change StateLexDefault for proper state
-            }
-            case '1' -> {
-                strUL += "1";
-                context.ChangeState(new StateLexDefault(context, strUL)); // TODO: change StateLexDefault for proper state
-            }
-            case '+' -> {
-                isUnitOver = true;
-            }
-            default -> {
-                context.ErreurLex("invalid character");
-            }
+        if(nextChar >= '0' && nextChar <= '9'){
+            strUL += nextChar;
+            context.ChangeState(new StateLexNbr(context, strUL));
         }
+
+        else if(nextChar >= 'A' && nextChar <= 'Z'){
+            strUL += nextChar;
+            context.ChangeState(new StateLexVar(context, strUL));
+        }
+        else if(nextChar >= 'a' && nextChar <= 'z'){
+            context.ErreurLex("variables must start with a capitalised letter");
+        }
+        else if(nextChar == '_'){
+            context.ErreurLex("variables must start with a capitalised letter");
+        }
+
+        else if(nextChar == '*' || nextChar == '/'){
+            strUL += nextChar;
+            context.ChangeState(new StateLexOp1(context, strUL));
+        }
+        else if(nextChar == '+' || nextChar == '-'){
+            strUL += nextChar;
+            context.ChangeState(new StateLexOp2(context, strUL));
+        }
+
+        else if(nextChar == '('){
+            strUL += nextChar;
+            context.ChangeState(new StateLexParO(context, strUL));
+        }
+        else if(nextChar == ')'){
+            strUL += nextChar;
+            context.ChangeState(new StateLexParC(context, strUL));
+        }
+
+        else if(nextChar == ' '){
+            // ...
+        }
+        else if(nextChar == ';'){
+            // ...
+        }
+        else if(nextChar == '\n'){
+            // ...
+        }
+        else {
+            context.ErreurLex("invalid character");
+        }
+
 
     }
 

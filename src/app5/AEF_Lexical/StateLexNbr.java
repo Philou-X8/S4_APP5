@@ -17,12 +17,12 @@ public class StateLexNbr implements StateLex{
 
     @Override
     public void ReadNext(char nextChar) {
-        if(nextChar == '0'){
-            strUL += "0";
-            context.ChangeState(new StateLexDefault(context, strUL)); // TODO: change StateLexDefault for proper state
+        if(nextChar >= '0' && nextChar <= '9'){
+            strUL += nextChar;
+            //context.ChangeState(new StateLexDefault(context, strUL)); // no need to change state
         }
         else {
-            context.ErreurLex("invalid character");
+            isUnitOver = true;
         }
 
     }
