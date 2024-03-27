@@ -12,6 +12,8 @@ public class AnalLex {
 // Attributs
 //  ...
   private StateLex stateLex;
+  private int cursor;
+  private String equationStr;
 	
   /**
    * Constructeur pour l'initialisation d'attribut(s)
@@ -19,10 +21,14 @@ public class AnalLex {
   public AnalLex( ) {  // arguments possibles
     //
     stateLex = new StateLexDefault(this, "");
+    equationStr = "";
+    cursor = 0;
   }
   public AnalLex(String str) {  // arguments possibles
     //
     stateLex = new StateLexDefault(this, "");
+    equationStr = str;
+    cursor = 0;
   }
 
   /** resteTerminal() retourne :
@@ -44,15 +50,27 @@ public class AnalLex {
      //
     Terminal terminal = null;
     while (terminal == null){
+      stateLex.ReadNext(GetNextChar());
       terminal = stateLex.GetTerminal();
-      stateLex.ReadNext('0');
     }
 
-
+    cursor--; // move back
+    stateLex = new StateLexDefault(this, ""); // reset state machine for next UL
     return terminal; //temp return
   }
   public void ChangeState(StateLex nextState){
     stateLex = nextState;
+  }
+  private char GetNextChar(){
+
+    if(cursor < equationStr.length()) {
+      char nextChar = equationStr.charAt(cursor);
+      cursor++;
+      return nextChar;
+    } else {
+      return ' ';
+    }
+
   }
  
   /**
@@ -60,7 +78,7 @@ public class AnalLex {
    */
   public void ErreurLex(String s) {	
      //
-
+    System.out.println("ERROR near character " + cursor + ", " + s);
   }
 
   
