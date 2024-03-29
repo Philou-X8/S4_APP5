@@ -2,16 +2,24 @@ package app5.AST_Syntax;
 
 /** @author Ahmed Khoumsi */
 
+import app5.Terminal;
+import app5.TerminalTypes;
+
 /** Classe representant une feuille d'AST
  */
 public class NoeudAST extends ElemAST {
 
   // Attributs
+  private Terminal terminal;
+  private ElemAST branchL;
+  private ElemAST branchR;
 
   /** Constructeur pour l'initialisation d'attributs
    */
-  public NoeudAST( ) { // avec arguments
-    //
+  public NoeudAST(Terminal opTerminal, ElemAST bL, ElemAST bR ) {
+    terminal = opTerminal;
+    branchL = bL;
+    branchR = bR;
   }
 
  
@@ -19,6 +27,7 @@ public class NoeudAST extends ElemAST {
    */
   public int EvalAST( ) {
      //
+
 
     return 0; // TEMP
   }
@@ -29,7 +38,7 @@ public class NoeudAST extends ElemAST {
   public String LectAST( ) {
      //
 
-    return ""; // temp
+    return "( " + branchL.LectAST() + " " + terminal.chaine + " " + branchR.LectAST() + " )"; // temp
   }
 
 }

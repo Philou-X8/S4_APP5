@@ -2,26 +2,35 @@ package app5.AST_Syntax;
 
 /** @author Ahmed Khoumsi */
 
+import app5.Terminal;
+import app5.TerminalTypes;
+
 /** Classe representant une feuille d'AST
  */
 public class FeuilleAST extends ElemAST {
 
   // Attribut(s)
-
+  private Terminal terminal;
 
 /**Constructeur pour l'initialisation d'attribut(s)
  */
-  public FeuilleAST( ) {  // avec arguments
-    //
+  public FeuilleAST(Terminal varTerminal) {  // avec arguments
+      terminal = varTerminal;
   }
 
 
   /** Evaluation de feuille d'AST
    */
   public int EvalAST( ) {
-      //
+      if(terminal.Type() == TerminalTypes.NUMBER){
+          try{
+              return Integer.parseInt(terminal.chaine);
+          } catch (NumberFormatException e){
+              System.out.println("ERROR: Integer.parseInt failed on [" + terminal.chaine + "]");
+          }
 
-      return 0; // TEMP
+      }
+      return 0;
   }
 
 
@@ -29,7 +38,7 @@ public class FeuilleAST extends ElemAST {
    */
   public String LectAST( ) {
       //
-      return ""; // temp
+      return terminal.chaine; // temp
   }
 
 }
