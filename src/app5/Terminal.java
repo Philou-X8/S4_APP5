@@ -18,7 +18,7 @@ public class Terminal {
  */	
   public Terminal( ) {   // arguments possibles
      //
-    chaine = "";
+    chaine = "epsilon";
     type = TerminalTypes.EMPTY;
   }
   public Terminal(String text, TerminalTypes tType) {   // arguments possibles

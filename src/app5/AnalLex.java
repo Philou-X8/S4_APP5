@@ -14,6 +14,8 @@ public class AnalLex {
   private StateLex stateLex;
   private int cursor;
   private String equationStr;
+
+  private boolean isValid;
 	
   /**
    * Constructeur pour l'initialisation d'attribut(s)
@@ -23,12 +25,16 @@ public class AnalLex {
     stateLex = new StateLexDefault(this, "");
     equationStr = "";
     cursor = 0;
+
+    isValid = true;
   }
   public AnalLex(String str) {  // arguments possibles
     //
     stateLex = new StateLexDefault(this, "");
     equationStr = str;
     cursor = 0;
+
+    isValid = true;
   }
 
   /** resteTerminal() retourne :
@@ -37,9 +43,16 @@ public class AnalLex {
    */
   public boolean resteTerminal( ) {
     //
+    if(!isValid){
+      return false; // stop reading upon error detection
+    }
+    else if(stateLex.GetTerminal() != null){
+      return (stateLex.GetTerminal().Type() != TerminalTypes.EOF); // check if last UL is not EOF
+    }
+    else {
+      return true;
+    }
 
-
-    return true; // temp return
   }
   
   
@@ -47,20 +60,26 @@ public class AnalLex {
    *  Cette methode est une implementation d'un AEF
    */
   public Terminal prochainTerminal( ) {
-     //
+    stateLex = new StateLexDefault(this, ""); // reset state machine for next UL
+
     Terminal terminal = null;
-    while (terminal == null){
+    while ((terminal == null) && isValid){
       stateLex.ReadNext(GetNextChar());
       terminal = stateLex.GetTerminal();
-    }
 
+    }
     cursor--; // move back
-    stateLex = new StateLexDefault(this, ""); // reset state machine for next UL
+
+    if ((terminal == null) || (!isValid)){ // error occurred
+      terminal = new Terminal("Nan", TerminalTypes.NAN);
+    }
     return terminal; //temp return
   }
+
   public void ChangeState(StateLex nextState){
     stateLex = nextState;
   }
+
   private char GetNextChar(){
 
     if(cursor < equationStr.length()) {
@@ -79,6 +98,8 @@ public class AnalLex {
   public void ErreurLex(String s) {	
      //
     System.out.println("ERROR near character " + cursor + ", " + s);
+
+    isValid = false;
   }
 
   

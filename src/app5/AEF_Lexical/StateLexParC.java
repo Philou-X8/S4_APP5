@@ -18,14 +18,14 @@ public class StateLexParC implements StateLex{
 
     @Override
     public void ReadNext(char nextChar) {
-        if(nextChar == '0'){
-            strUL += "0";
-            context.ChangeState(new StateLexDefault(context, strUL)); // TODO: change StateLexDefault for proper state
-        }
-        else {
-            context.ErreurLex("invalid character");
-        }
-
+//        if(nextChar == '0'){
+//            strUL += "0";
+//            context.ChangeState(new StateLexDefault(context, strUL)); // TODO: change StateLexDefault for proper state
+//        }
+//        else {
+//            context.ErreurLex("invalid character");
+//        }
+        isUnitOver = true;
     }
 
     @Override

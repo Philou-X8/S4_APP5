@@ -18,12 +18,15 @@ public class StateLexOp1 implements StateLex{
 
     @Override
     public void ReadNext(char nextChar) {
-        if(nextChar == '0'){
-            strUL += "0";
-            context.ChangeState(new StateLexDefault(context, strUL)); // TODO: change StateLexDefault for proper state
+
+        if(nextChar == '*'){
+            context.ErreurLex("Operator " + strUL + "+ not supported");
+        }
+        else if(nextChar == '/'){
+            context.ErreurLex("Operator " + strUL + "- not supported");
         }
         else {
-            context.ErreurLex("invalid character");
+            isUnitOver = true;
         }
 
     }

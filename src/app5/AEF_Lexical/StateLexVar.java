@@ -18,12 +18,18 @@ public class StateLexVar implements StateLex{
 
     @Override
     public void ReadNext(char nextChar) {
-        if(nextChar == '0'){
-            strUL += "0";
-            context.ChangeState(new StateLexDefault(context, strUL)); // TODO: change StateLexDefault for proper state
+        if(nextChar >= 'A' && nextChar <= 'Z'){
+            strUL += nextChar;
+        }
+        else if(nextChar >= 'a' && nextChar <= 'z'){
+            strUL += nextChar;
+        }
+        else if(nextChar == '_'){
+            strUL += nextChar;
+            context.ChangeState(new StateLexUnd(context, strUL));
         }
         else {
-            context.ErreurLex("invalid character");
+            isUnitOver = true;
         }
 
     }

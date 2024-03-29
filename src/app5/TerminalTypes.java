@@ -18,5 +18,9 @@ public enum TerminalTypes {
 
     PARAOPEN,
     PARACLOSE,
-    EOF
+    EOF,
+
+    /** NOT A NUMBER or invalid formating
+     */
+    NAN
 }

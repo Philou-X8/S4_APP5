@@ -18,12 +18,19 @@ public class StateLexUnd implements StateLex{
 
     @Override
     public void ReadNext(char nextChar) {
-        if(nextChar == '0'){
-            strUL += "0";
-            context.ChangeState(new StateLexDefault(context, strUL)); // TODO: change StateLexDefault for proper state
+        if(nextChar >= 'A' && nextChar <= 'Z'){
+            strUL += nextChar;
+            context.ChangeState(new StateLexVar(context, strUL));
+        }
+        else if(nextChar >= 'a' && nextChar <= 'z'){
+            strUL += nextChar;
+            context.ChangeState(new StateLexVar(context, strUL));
+        }
+        else if(nextChar == '_'){
+            context.ErreurLex("variables cannot have 2 underscore in a row");
         }
         else {
-            context.ErreurLex("invalid character");
+            context.ErreurLex("variables cannot end with an underscore");
         }
 
     }
