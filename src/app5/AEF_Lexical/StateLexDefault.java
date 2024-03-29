@@ -2,6 +2,7 @@ package app5.AEF_Lexical;
 
 import app5.AnalLex;
 import app5.Terminal;
+import app5.TerminalTypes;
 
 public class StateLexDefault implements StateLex{
 
@@ -51,14 +52,18 @@ public class StateLexDefault implements StateLex{
             context.ChangeState(new StateLexParC(context, strUL));
         }
 
-        else if(nextChar == ' '){
-            // ...
-        }
         else if(nextChar == ';'){
-            // ...
+            // consider this as the end-of-line or end-of-file character
+            strUL = ";";
+            isUnitOver = true;
+        }
+        else if(nextChar == ' '){
+            // do nothing
+            strUL = "";
         }
         else if(nextChar == '\n'){
-            // ...
+            // do nothing
+            strUL = "";
         }
         else {
             context.ErreurLex("invalid character");
@@ -70,7 +75,7 @@ public class StateLexDefault implements StateLex{
     @Override
     public Terminal GetTerminal() {
         if(isUnitOver){
-            return new Terminal(strUL);
+            return new Terminal(strUL, TerminalTypes.EOF);
         } else {
             return null;
         }

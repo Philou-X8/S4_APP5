@@ -2,6 +2,7 @@ package app5.AEF_Lexical;
 
 import app5.AnalLex;
 import app5.Terminal;
+import app5.TerminalTypes;
 
 public class StateLexOp2 implements StateLex{
 
@@ -35,7 +36,7 @@ public class StateLexOp2 implements StateLex{
     @Override
     public Terminal GetTerminal() {
         if(isUnitOver){
-            return new Terminal(strUL);
+            return new Terminal(strUL, TerminalTypes.OPERATOR2);
         } else {
             return null;
         }

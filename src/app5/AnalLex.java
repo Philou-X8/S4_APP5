@@ -39,7 +39,7 @@ public class AnalLex {
     //
 
 
-    return false; // temp return
+    return true; // temp return
   }
   
   
@@ -68,7 +68,7 @@ public class AnalLex {
       cursor++;
       return nextChar;
     } else {
-      return ' ';
+      return ';';
     }
 
   }
