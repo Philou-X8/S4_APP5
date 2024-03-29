@@ -22,6 +22,9 @@ public class NoeudAST extends ElemAST {
     branchR = bR;
   }
 
+  public Terminal GetTerminal(){
+    return terminal;
+  }
  
   /** Evaluation de noeud d'AST
    */

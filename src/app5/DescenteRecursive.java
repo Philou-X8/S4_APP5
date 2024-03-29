@@ -41,9 +41,58 @@ public class DescenteRecursive {
   // Methode pour chaque symbole non-terminal de la grammaire retenue
 // ... 
 // ...
-  public ElemAST E() {
-    ElemAST n1 = null;
-    ElemAST n2 = null;
+  private ElemAST E() {
+    ElemAST b1 = null;
+    ElemAST b2 = null;
+
+    switch (lastTerminal.Type()){
+      case NUMBER, VARIABLE, PARAOPEN -> {
+        b1 = T();
+
+        b2 = EE();
+      }
+      default -> {
+        ErreurSynt("Syntax error");
+      }
+    }
+
+    // return EE( b1 ); // give it right branch // <--------------------------------------------------------
+
+    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
+  }
+  private ElemAST EE() {
+
+    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
+  }
+  private ElemAST T() {
+    ElemAST b1 = null;
+    ElemAST b2 = null;
+
+    switch (lastTerminal.Type()){
+      case NUMBER, VARIABLE, PARAOPEN -> {
+        b1 = F();
+
+        b2 = TT();
+      }
+      default -> {
+        ErreurSynt("Syntax error");
+      }
+    }
+
+    if(b2.GetTerminal().Type() == TerminalTypes.EMPTY){
+      return b1;
+    }
+    else {
+
+    }
+
+    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
+  }
+  private ElemAST TT() {
+
+    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
+  }
+  private ElemAST F() {
 
     return new NoeudAST(lastTerminal, null, null); // TEMP TODO
   }

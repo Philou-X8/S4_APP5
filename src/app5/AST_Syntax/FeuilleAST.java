@@ -18,6 +18,9 @@ public class FeuilleAST extends ElemAST {
       terminal = varTerminal;
   }
 
+  public Terminal GetTerminal(){
+      return terminal;
+  }
 
   /** Evaluation de feuille d'AST
    */

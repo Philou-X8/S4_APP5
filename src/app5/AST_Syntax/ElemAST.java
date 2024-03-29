@@ -2,11 +2,14 @@ package app5.AST_Syntax;
 
 /** @author Ahmed Khoumsi */
 
+import app5.Terminal;
+
 /** Classe Abstraite dont heriteront les classes FeuilleAST et NoeudAST
  */
 public abstract class ElemAST {
 
-  
+  public abstract Terminal GetTerminal();
+
   /** Evaluation d'AST
    */
   public abstract int EvalAST();
