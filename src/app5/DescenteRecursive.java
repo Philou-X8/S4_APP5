@@ -21,9 +21,7 @@ public class DescenteRecursive {
    */
   public DescenteRecursive(String in) {
     Reader r = new Reader(in);
-
     lexicon = new AnalLex(r.toString());
-
   }
 
 
@@ -32,11 +30,8 @@ public class DescenteRecursive {
    * Elle retourne une reference sur la racine de l'AST construit
    */
   public ElemAST AnalSynt() {
-
     lastTerminal = lexicon.prochainTerminal();
-    ElemAST root = E();
-
-    return root; //TEMP TODO
+    return E();
   }
 
 
@@ -45,17 +40,14 @@ public class DescenteRecursive {
 // ...
   private ElemAST E() {
     ElemAST b1 = null;
-
     switch (lastTerminal.Type()){
       case NUMBER, VARIABLE, PARAOPEN -> {
         b1 = T();
-
       }
       default -> {
         ErreurSynt("Syntax error (level E)");
       }
     }
-
     return EE(b1);
   }
   private ElemAST EE(ElemAST upperBranch) {
@@ -71,7 +63,6 @@ public class DescenteRecursive {
       }
       case PARACLOSE, EOF -> { // operator: ), eof
         return upperBranch;
-
       }
       default -> {
         ErreurSynt("Syntax error (level EE)");
@@ -82,7 +73,6 @@ public class DescenteRecursive {
 
   private ElemAST T() {
     ElemAST b1 = null;
-
     switch (lastTerminal.Type()){
       case NUMBER, VARIABLE, PARAOPEN -> {
         b1 = F();
@@ -107,7 +97,6 @@ public class DescenteRecursive {
       }
       case OPERATOR2, PARACLOSE, EOF -> { // operator: +, ), eof
         return upperBranch;
-
       }
       default -> {
         ErreurSynt("Syntax error (level TT)");
