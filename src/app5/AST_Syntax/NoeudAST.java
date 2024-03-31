@@ -30,7 +30,18 @@ public class NoeudAST extends ElemAST {
    */
   public int EvalAST( ) {
      //
-
+    if(terminal.chaine.equals("+")){
+      return branchL.EvalAST() + branchR.EvalAST();
+    }
+    else if(terminal.chaine.equals("-")){
+      return branchL.EvalAST() - branchR.EvalAST();
+    }
+    else if(terminal.chaine.equals("*")){
+      return branchL.EvalAST() * branchR.EvalAST();
+    }
+    else if(terminal.chaine.equals("/")){
+      return branchL.EvalAST() / branchR.EvalAST();
+    }
 
     return 0; // TEMP
   }

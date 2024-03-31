@@ -30,6 +30,7 @@ public class AnalLex {
   }
   public AnalLex(String str) {  // arguments possibles
     //
+    System.out.println("Input string: " + str);
     stateLex = new StateLexDefault(this, "");
     equationStr = str;
     cursor = 0;
@@ -73,6 +74,8 @@ public class AnalLex {
     if ((terminal == null) || (!isValid)){ // error occurred
       terminal = new Terminal("Nan", TerminalTypes.NAN);
     }
+
+    //System.out.println("Terminal read: " + terminal.chaine);
     return terminal; //temp return
   }
 

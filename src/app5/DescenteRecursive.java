@@ -20,7 +20,9 @@ public class DescenteRecursive {
    * - pour l'initalisation d'attribut(s)
    */
   public DescenteRecursive(String in) {
-    lexicon = new AnalLex(in);
+    Reader r = new Reader(in);
+
+    lexicon = new AnalLex(r.toString());
 
   }
 
@@ -34,7 +36,7 @@ public class DescenteRecursive {
     lastTerminal = lexicon.prochainTerminal();
     ElemAST root = E();
 
-    return null; //TEMP TODO
+    return root; //TEMP TODO
   }
 
 
@@ -43,58 +45,98 @@ public class DescenteRecursive {
 // ...
   private ElemAST E() {
     ElemAST b1 = null;
-    ElemAST b2 = null;
 
     switch (lastTerminal.Type()){
       case NUMBER, VARIABLE, PARAOPEN -> {
         b1 = T();
 
-        b2 = EE();
       }
       default -> {
-        ErreurSynt("Syntax error");
+        ErreurSynt("Syntax error (level E)");
       }
     }
 
-    // return EE( b1 ); // give it right branch // <--------------------------------------------------------
-
-    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
+    return EE(b1);
   }
-  private ElemAST EE() {
-
-    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
-  }
-  private ElemAST T() {
+  private ElemAST EE(ElemAST upperBranch) {
     ElemAST b1 = null;
     ElemAST b2 = null;
+    switch (lastTerminal.Type()){
+      case OPERATOR2 -> { // operator: +
+        Terminal operator = lastTerminal; // save operator type, used to build noeu
+        lastTerminal = lexicon.prochainTerminal(); // read next terminal
+        b1 = T();
+        b2 = EE(b1);
+        return new NoeudAST(operator, upperBranch, b2);
+      }
+      case PARACLOSE, EOF -> { // operator: ), eof
+        return upperBranch;
+
+      }
+      default -> {
+        ErreurSynt("Syntax error (level EE)");
+      }
+    }
+    return new FeuilleAST(new Terminal("NAN", TerminalTypes.NAN));
+  }
+
+  private ElemAST T() {
+    ElemAST b1 = null;
 
     switch (lastTerminal.Type()){
       case NUMBER, VARIABLE, PARAOPEN -> {
         b1 = F();
 
-        b2 = TT();
       }
       default -> {
-        ErreurSynt("Syntax error");
+        ErreurSynt("Syntax error (level T)");
       }
     }
-
-    if(b2.GetTerminal().Type() == TerminalTypes.EMPTY){
-      return b1;
-    }
-    else {
-
-    }
-
-    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
+    return TT(b1);
   }
-  private ElemAST TT() {
+  private ElemAST TT(ElemAST upperBranch) {
+    ElemAST b1 = null;
+    ElemAST b2 = null;
+    switch (lastTerminal.Type()){
+      case OPERATOR1 -> { // operator: *
+        Terminal operator = lastTerminal; // save operator type, used to build noeu
+        lastTerminal = lexicon.prochainTerminal(); // read next terminal
+        b1 = F();
+        b2 = TT(b1);
+        return new NoeudAST(operator, upperBranch, b2);
+      }
+      case OPERATOR2, PARACLOSE, EOF -> { // operator: +, ), eof
+        return upperBranch;
 
-    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
+      }
+      default -> {
+        ErreurSynt("Syntax error (level TT)");
+      }
+    }
+    return new FeuilleAST(new Terminal("NAN", TerminalTypes.NAN));
   }
+
   private ElemAST F() {
-
-    return new NoeudAST(lastTerminal, null, null); // TEMP TODO
+    switch (lastTerminal.Type()){
+      case NUMBER, VARIABLE -> {
+        ElemAST b1 = new FeuilleAST(lastTerminal); // put terminal (variable or number) in leaf
+        lastTerminal = lexicon.prochainTerminal(); // read next terminal
+        return b1;
+      }
+      case PARAOPEN -> {
+        lastTerminal = lexicon.prochainTerminal(); // done with < ( > so read next terminal
+        ElemAST b1 = E();
+        if(lastTerminal.Type() != TerminalTypes.PARACLOSE){
+          ErreurSynt("Syntax error (level F), related to closing parentheses");
+        }
+        lastTerminal = lexicon.prochainTerminal(); // catch closing parentheses
+        return b1;
+      }
+      default -> {
+        ErreurSynt("Syntax error (level F)");
+      }
+    }
+    return new FeuilleAST(new Terminal("NAN", TerminalTypes.NAN));
   }
 
 
@@ -102,7 +144,7 @@ public class DescenteRecursive {
    * ErreurSynt() envoie un message d'erreur syntaxique
    */
   public void ErreurSynt(String s) {
-
+    System.out.println("Error in syntax: " + s);
   }
 
 
