@@ -31,13 +31,90 @@ public class DescenteRecursive {
    */
   public ElemAST AnalSynt() {
     lastTerminal = lexicon.prochainTerminal();
-    return E();
+    return E_();
   }
 
 
   // Methode pour chaque symbole non-terminal de la grammaire retenue
 // ... 
 // ...
+  private ElemAST E_() {
+    ElemAST b1 = null;
+    ElemAST b2 = null;
+
+    b1 = T_();
+    switch (lastTerminal.Type()){
+      case OPERATOR2 -> { // operator: +
+        Terminal operator = lastTerminal; // save operator type, used to build noeu
+        lastTerminal = lexicon.prochainTerminal(); // read next terminal
+        b2 = E_();
+        return new NoeudAST(operator, b1, b2);
+      }
+      case PARACLOSE, EOF -> { // operator: ), eof
+        return b1;
+      }
+      default -> {
+        ErreurSynt("Syntax error (level E_)");
+      }
+    }
+
+
+    ErreurSynt("Syntax error (level E_) " + lastTerminal.Type().toString());
+    return new FeuilleAST(new Terminal("NAN", TerminalTypes.NAN));
+  }
+  private ElemAST T_() {
+    ElemAST b1 = null;
+    ElemAST b2 = null;
+
+    b1 = F_();
+    switch (lastTerminal.Type()){
+      case OPERATOR1 -> { // operator: *
+        Terminal operator = lastTerminal; // save operator type, used to build noeu
+        lastTerminal = lexicon.prochainTerminal(); // read next terminal
+        b2 = T_();
+        return new NoeudAST(operator, b1, b2);
+      }
+      case OPERATOR2, PARACLOSE, EOF -> { // operator: ), eof
+        return b1;
+      }
+      default -> {
+        ErreurSynt("Syntax error (level E_)");
+      }
+    }
+
+    ErreurSynt("Syntax error (level T_) " + lastTerminal.Type().toString());
+    return new FeuilleAST(new Terminal("NAN", TerminalTypes.NAN));
+  }
+  private ElemAST F_() {
+    ElemAST b1 = null;
+    ElemAST b2 = null;
+    switch (lastTerminal.Type()){
+      case NUMBER, VARIABLE -> {
+        b1 = new FeuilleAST(lastTerminal); // put terminal (variable or number) in leaf
+        lastTerminal = lexicon.prochainTerminal(); // read next terminal
+        return b1;
+      }
+      case PARAOPEN -> {
+        lastTerminal = lexicon.prochainTerminal(); // done with < ( > so read next terminal
+        b1 = E_();
+        if(lastTerminal.Type() != TerminalTypes.PARACLOSE){
+          ErreurSynt("Syntax error (level F), related to closing parentheses");
+        }
+        lastTerminal = lexicon.prochainTerminal(); // catch closing parentheses
+        return b1;
+      }
+      default -> {
+        ErreurSynt("Syntax error (level F)");
+      }
+    }
+
+    ErreurSynt("Syntax error (level F_) " + lastTerminal.Type().toString());
+    return new FeuilleAST(new Terminal("NAN", TerminalTypes.NAN));
+  }
+
+
+
+
   private ElemAST E() {
     ElemAST b1 = null;
     switch (lastTerminal.Type()){
