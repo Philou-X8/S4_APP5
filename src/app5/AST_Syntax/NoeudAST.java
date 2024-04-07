@@ -48,6 +48,11 @@ public class NoeudAST extends ElemAST {
 
     return "( " + branchL.LectAST() + " " + terminal.chaine + " " + branchR.LectAST() + " )"; // temp
   }
+  public String Postfix( ) {
+     //
+
+    return branchL.LectAST() + " " + branchR.LectAST() + " " + terminal.chaine + " " ; // temp
+  }
 
 }
 

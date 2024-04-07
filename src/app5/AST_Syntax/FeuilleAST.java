@@ -43,5 +43,10 @@ public class FeuilleAST extends ElemAST {
       //
       return terminal.chaine; // temp
   }
+  public String Postfix( ) {
+      //
+
+    return terminal.chaine; // temp
+  }
 
 }
