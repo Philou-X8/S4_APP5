@@ -1,2 +1,2 @@
-Lecture de l'AST trouve : ( 3 + ( ( 5 * 7 ) + ( ( 09 * ( 13 - 11 ) ) + ( 20 / ( 2 * 2 ) ) ) ) )
-Evaluation de l'AST trouve : 61
+Lecture de l'AST trouve : ( 1 + ( 2 + 3 ) )
+Evaluation de l'AST trouve : 6

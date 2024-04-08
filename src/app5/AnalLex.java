@@ -90,6 +90,7 @@ public class AnalLex {
       cursor++;
       return nextChar;
     } else {
+      cursor++;
       return ';';
     }
 

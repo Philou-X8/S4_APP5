@@ -31,7 +31,11 @@ public class DescenteRecursive {
    */
   public ElemAST AnalSynt() {
     lastTerminal = lexicon.prochainTerminal();
-    return E_();
+    ElemAST ret = E_();
+    if(lastTerminal.Type() == TerminalTypes.PARACLOSE){
+      ErreurSynt("Syntax error (level 0), related to closing parentheses");
+    }
+    return ret;
   }
 
 
